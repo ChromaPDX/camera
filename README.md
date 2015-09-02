@@ -1,42 +1,26 @@
-Mobile Packages
-===============
+# Meteor Camera Package
 
-This repository contains three simple Meteor packages that work on mobile and desktop. There are also three small example apps that demonstrate their usage.
+Add it to your [Meteor](http://meteor.com) app with `meteor add mdg:camera`. The api is super simple - there is only one function to call.
 
-These packages work with Meteor 0.9.2 and above.
+### MeteorCamera.getPicture([options], callback)
 
-## Packages
+Prompt the user to take a photo with their device and get the picture as a Data URI in JPEG format.
 
-### Camera
+#### options
 
-The package `mdg:camera` allows you to take photos on desktop and mobile with a single function call.
+`options` is an optional argument that is an Object with the following possible keys:
 
-[Read the full Camera documentation here.](https://github.com/meteor/mobile-packages/blob/master/packages/mdg:camera/README.md)
+- `width` An integer that specifies the minimum width of the returned photo.
+- `height` An integer that specifies the minimum height of the returned photo.
+- `quality` A number from 0 to 100 specifying the desired quality of JPEG encoding.
 
-### Geolocation
+#### callback(error, data)
 
-The package `mdg:geolocation` provides a reactive interface to the device's GPS location.
+`callback` is a required argument that is a function that takes two arguments:
 
-[Read the full Geolocation documentation here.](https://github.com/meteor/mobile-packages/blob/master/packages/mdg:geolocation/README.md)
+- `error` A [Meteor.Error](http://docs.meteor.com/#meteor_error) with a platform-specific error message.
+- `data` A base64-encoded data URI for the image taken by the camera. This parameter can be used directly in the 'src' attribute of an image tag.
 
-### reload-on-resume
 
-The package `mdg:reload-on-resume` delays hot code push on mobile devices until the user has closed and re-opened the app, so that their experience is not interrupted by a reload.
-
-[Read the full reload-on-resume documentation here.](https://github.com/meteor/mobile-packages/blob/master/packages/mdg:reload-on-resume/README.md)
-
-## Example Apps
-
-### simple-photo
-
-This example app has one button that takes a photo and displays it on the screen. It demonstrates usage of the Camera package.
-
-### simple-map
-
-This example app uses the [Google Maps Static Maps API](https://developers.google.com/maps/documentation/staticmaps/) to show a map with a marker at your current location. It demonstrates usage of the Geolocation package.
-
-### SoLoMo
-
-This is the app that was first used to demonstrate Meteor Cordova functionality at the Meteor Devshop in August 2014. It uses the Camera, Geolocation, and reload-on-resume packages, in addition to local packages for [Ionic Framework CSS](http://ionicframework.com/) and a simple implementation of the [Google Maps Javascript API](https://developers.google.com/maps/documentation/javascript/).
-
-<img src="examples/solomo/screenshot.jpg" width="300" />
+> Warning: In the iOS simulator, the device camera is not accessible so you will get an error that says "source type 1 not available."
+> I'm working on a fallback for iOS that will use the photo library when the camera is not available, but for now just test in your web browser, a physical device, or the Android simulator.
