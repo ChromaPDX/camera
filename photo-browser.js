@@ -63,9 +63,9 @@ Template.viewfinder.rendered = function() {
   var resized = false;
   video.addEventListener('canplay', function() {
     if (! resized) {
-      viewfinderHeight = video.videoHeight / (video.videoWidth / viewfinderWidth);
-      video.setAttribute('width', viewfinderWidth);
-      video.setAttribute('height', viewfinderHeight);
+      // viewfinderHeight = video.videoHeight / (video.videoWidth / viewfinderWidth);
+      video.setAttribute('width', '100%');
+      video.setAttribute('height', '100%');
       resized = true;
     }
   }, false);
