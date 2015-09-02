@@ -1,5 +1,5 @@
 Package.describe({
-  name: "ChromaPDX:camera",
+  name: "chroma:camera",
   summary: "Photos with one function call on desktop and mobile.",
   version: "1.1.5",
   git: "https://github.com/ChromaPDX/camera"
