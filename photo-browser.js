@@ -141,6 +141,7 @@ MeteorCamera.getPicture = function (options, callback) {
     UI.remove(view);
     photo.set(null);
     callback.apply(null, originalArgs);
+    Webcam.reset();
   };
 
   view = UI.renderWithData(Template.camera);
