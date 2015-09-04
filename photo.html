@@ -32,9 +32,8 @@
 
 <template name="viewfinder">
   <div class="viewfinder">
-    <video id="video" class="{{#if waitingForPermission}}hidden{{/if}}">
-      </video>
-    
+   <div id="webcam"></div>
+
     <div>
       {{#if waitingForPermission}}
         <p>Waiting for camera permissions...</p>
@@ -45,7 +44,6 @@
     </div>
   </div>
 
-  <canvas id="canvas" style="visibility: hidden"></canvas>
 </template>
 
 <template name="genericError">

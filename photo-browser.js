@@ -1,4 +1,3 @@
-var stream;
 var closeAndCallback;
 
 var photo = new ReactiveVar(null);
@@ -15,60 +14,27 @@ Template.viewfinder.rendered = function() {
 
   waitingForPermission.set(true);
 
-  var video = template.find("video");
+  Webcam.on('error', function(err) {
+    console.log(err);
+  });
 
-  // stream webcam video to the <video> element
-  var success = function(newStream) {
-    stream = newStream;
-
-    if (navigator.mozGetUserMedia) {
-      video.mozSrcObject = stream;
-    } else {
-      var vendorURL = window.URL || window.webkitURL;
-      video.src = vendorURL.createObjectURL(stream);
-    }
-    video.play();
-
+  Webcam.on( 'live', function() {
     waitingForPermission.set(false);
-  };
+  } );
 
-  // user declined or there was some other error
-  var failure = function(err) {
-    error.set(err);
-  };
+  Webcam.setSWFLocation("/packages/benjick_webcam/webcamjs/webcam.swf");
 
-  // tons of different browser prefixes
-  navigator.getUserMedia = (
-    navigator.getUserMedia ||
-    navigator.webkitGetUserMedia ||
-    navigator.mozGetUserMedia ||
-    navigator.msGetUserMedia
-  );
+  Webcam.set({
+    width: 320,
+    height: 240,
+    dest_width: 640,
+    dest_height: 480,
+    image_format: 'jpeg',
+    jpeg_quality: 90
+  });
 
-  if (! navigator.getUserMedia) {
-    // no browser support, sorry
-    failure("BROWSER_NOT_SUPPORTED");
-    return;
-  }
+  Webcam.attach('#webcam');
 
-  // initiate request for webcam
-  navigator.getUserMedia({
-      video: true,
-      audio: false
-  }, success, failure);
-
-  // resize viewfinder to a reasonable size, not necessarily photo size
-  var viewfinderWidth = 320;
-  var viewfinderHeight = 240;
-  var resized = false;
-  video.addEventListener('canplay', function() {
-    if (! resized) {
-      // viewfinderHeight = video.videoHeight / (video.videoWidth / viewfinderWidth);
-      video.setAttribute('width', '100%');
-      video.setAttribute('height', '100%');
-      resized = true;
-    }
-  }, false);
 };
 
 // is the current error a permission denied error?
@@ -112,24 +78,17 @@ Template.camera.events({
     } else {
       closeAndCallback(new Meteor.Error("cancel", "Photo taking was cancelled."));
     }
-    
-    if (stream) {
-      stream.stop();
-    }
   }
 });
 
 Template.viewfinder.events({
   'click .shutter': function (event, template) {
-    var video = template.find("video");
-    var canvas = template.find("canvas");
 
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
-    canvas.getContext('2d').drawImage(video, 0, 0, canvasWidth, canvasHeight);
-    var data = canvas.toDataURL('image/jpeg', quality);
-    photo.set(data);
-    stream.stop();
+    Webcam.snap( function(data_uri) {
+     console.log(data_uri);
+     photo.set(data_uri);
+    } );
+
   }
 });
 
@@ -176,14 +135,14 @@ MeteorCamera.getPicture = function (options, callback) {
   canvasHeight = Math.round(canvasHeight);
 
   var view;
-  
+
   closeAndCallback = function () {
     var originalArgs = arguments;
     UI.remove(view);
     photo.set(null);
     callback.apply(null, originalArgs);
   };
-  
+
   view = UI.renderWithData(Template.camera);
   UI.insert(view, document.body);
 };
