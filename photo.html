@@ -1,7 +1,4 @@
 <template name="camera">
-  <div class="camera-overlay">
-    {{! used to make the background dark}}
-  </div>
 
   <div class="camera-popup {{#if permissionDeniedError}}camera-popup-wide{{/if}}">
     {{#if error}}
@@ -16,13 +13,28 @@
       {{/if}}
     {{else}}
       {{#if photo}}
-        <div class="center">
-          <img src="{{photo}}" class="photo-preview" />
-          <div>
-            <button class="button use-photo">Use Photo</button>
-            <button class="button new-photo">Take New Photo</button>
-          </div>
+
+        <div class="modal show">
+         <div class="modal-dialog">
+           <div class="modal-content">
+             <div class="modal-header">
+               <h4 class="modal-title">Preview</h4>
+             </div>
+             <div class="modal-body">
+              <img src="{{photo}}" class="photo-preview" />
+              <div class="modal-footer">
+               <div>
+                 <button class="btn btn-default" data-dismiss="modal" >cancel</button>
+                 <button class="btn btn-default new-photo">Try again</button>
+                 <button class="btn btn-primary use-photo">Use this photo</button>
+               </div>
+              </div> <!-- /.modal-footer -->
+            </div><!-- /.modal-body -->
+          </div><!-- /.modal-content -->
+         </div><!-- /.modal-dialog -->
         </div>
+
+
       {{else}}
         {{> viewfinder}}
       {{/if}}
@@ -32,18 +44,34 @@
 
 <template name="viewfinder">
   <div class="viewfinder">
-   <div id="webcam"></div>
-
-    <div>
-      {{#if waitingForPermission}}
-        <p>Waiting for camera permissions...</p>
-      {{else}}
-        <button class="button shutter">Take Photo</button>
-      {{/if}}
-      <button class="button cancel">Cancel</button>
+   <div class="modal show">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          {{#if waitingForPermission}}
+            <h4 class="modal-title">
+             <i class="fa fa-cog fa-spin"></i>
+             Waiting for camera permissions...
+            </h4>
+          {{else}}
+            <h4 class="modal-title">Take a picture</h4>
+          {{/if}}
+        </div>
+        <div class="modal-body">
+          <div id="webcam"></div>
+          <div class="modal-footer">
+           <div>
+             <button class="btn btn-default cancel" data-dismiss="modal">cancel</button>
+             {{#unless waitingForPermission}}
+               <button class="btn btn-primary shutter">Cheese!</button>
+             {{/unless}}
+           </div>
+          </div> <!-- /.modal-footer -->
+        </div><!-- /.modal-body -->
+      </div><!-- /.modal-content -->
+     </div><!-- /.modal-dialog -->
     </div>
   </div>
-
 </template>
 
 <template name="genericError">
