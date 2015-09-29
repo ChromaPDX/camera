@@ -61,10 +61,12 @@
           <div id="webcam"></div>
           <div class="modal-footer">
            <div>
-             <button class="btn btn-default cancel" data-dismiss="modal">cancel</button>
              {{#unless waitingForPermission}}
-               <button class="btn btn-primary shutter">Cheese!</button>
+               <button class="btn btn-primary btn-block shutter">
+                <i class="fa fa-camera fa-2x"></i>
+               </button>
              {{/unless}}
+             <button class="btn btn-link btn-block cancel" data-dismiss="modal">cancel</button>
            </div>
           </div> <!-- /.modal-footer -->
         </div><!-- /.modal-body -->
