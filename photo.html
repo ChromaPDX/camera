@@ -1,6 +1,6 @@
 <template name="camera">
 
-  <div class="camera-popup {{#if permissionDeniedError}}camera-popup-wide{{/if}}">
+  <div class="camera-popup {{#if permissionDeniedError}}camera-popup-wide{{/if}}" data-schema-key="{{schemaKey}}" data-collection="{{collection}}" >
     {{#if error}}
       {{#if permissionDeniedError}}
         {{> permissionDenied}}
@@ -54,7 +54,11 @@
              Waiting for camera permissions...
             </h4>
           {{else}}
-            <h4 class="modal-title">Take a picture</h4>
+            <h4 class="modal-title">
+              <span class="default">Take a picture</span>
+              <span class="css-content-hook"></span>
+            </h4>
+            <!-- <h4 class="modal-title">Take a picture</h4> -->
           {{/if}}
         </div>
         <div class="modal-body">

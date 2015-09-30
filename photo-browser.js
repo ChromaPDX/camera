@@ -51,6 +51,12 @@ var browserNotSupportedError = function () {
 };
 
 Template.camera.helpers({
+  collection: function() {
+   return this.collection;
+  },
+  schemaKey: function() {
+   return this.schemaKey;
+  },
   photo: function () {
     return photo.get();
   },
@@ -144,6 +150,6 @@ MeteorCamera.getPicture = function (options, callback) {
     Webcam.reset();
   };
 
-  view = UI.renderWithData(Template.camera);
+  view = UI.renderWithData(Template.camera, options);
   UI.insert(view, document.body);
 };
